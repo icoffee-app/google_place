@@ -6,7 +6,7 @@ import 'package:google_place/google_place.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await DotEnv().load('.env');
+  await DotEnv().load();
   runApp(MyApp());
 }
 
@@ -29,12 +29,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  GooglePlace googlePlace;
+  late GooglePlace googlePlace;
   List<AutocompletePrediction> predictions = [];
 
   @override
   void initState() {
-    String apiKey = DotEnv().env['API_KEY'];
+    String apiKey = DotEnv().env['API_KEY'] ?? '';
     googlePlace = GooglePlace(apiKey);
     super.initState();
   }
@@ -90,14 +90,14 @@ class _HomePageState extends State<HomePage> {
                           color: Colors.white,
                         ),
                       ),
-                      title: Text(predictions[index].description),
+                      title: Text(predictions[index].description ?? ''),
                       onTap: () {
                         debugPrint(predictions[index].placeId);
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => DetailsPage(
-                              placeId: predictions[index].placeId,
+                              placeId: predictions[index].placeId ?? '',
                               googlePlace: googlePlace,
                             ),
                           ),
